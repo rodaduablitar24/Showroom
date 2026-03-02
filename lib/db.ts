@@ -11,6 +11,11 @@ export async function getAllUnits() {
   `
 }
 
+export async function getUnitById(id: number) {
+  const result = await sql`SELECT * FROM units WHERE id = ${id}`
+  return result[0] || null
+}
+
 export async function getStokUnits() {
   return await sql`
     SELECT * FROM units WHERE status = 'stok' ORDER BY created_at DESC
@@ -54,10 +59,11 @@ export async function addUnit(data: {
   tahun: number
   nopol: string
   harga_beli: number
+  warna: string
 }) {
   return await sql`
-    INSERT INTO units (tanggal_masuk, merk, type, tahun, nopol, harga_beli, status)
-    VALUES (${data.tanggal_masuk}, ${data.merk}, ${data.type}, ${data.tahun}, ${data.nopol}, ${data.harga_beli}, 'stok')
+    INSERT INTO units (tanggal_masuk, merk, type, tahun, nopol, harga_beli, warna, status)
+    VALUES (${data.tanggal_masuk}, ${data.merk}, ${data.type}, ${data.tahun}, ${data.nopol}, ${data.harga_beli}, ${data.warna}, 'stok')
     RETURNING *
   `
 }
@@ -78,10 +84,11 @@ export async function updateUnitDetails(id: number, data: {
   tahun: number
   nopol: string
   harga_beli: number
+  warna: string
 }) {
   return await sql`
     UPDATE units 
-    SET tanggal_masuk = ${data.tanggal_masuk}, merk = ${data.merk}, type = ${data.type}, tahun = ${data.tahun}, nopol = ${data.nopol}, harga_beli = ${data.harga_beli}
+    SET tanggal_masuk = ${data.tanggal_masuk}, merk = ${data.merk}, type = ${data.type}, tahun = ${data.tahun}, nopol = ${data.nopol}, harga_beli = ${data.harga_beli}, warna = ${data.warna}
     WHERE id = ${id}
     RETURNING *
   `
@@ -131,5 +138,16 @@ export async function getUserByUsername(username: string) {
 export async function createUser(username: string, hashedPassword: string) {
   return await sql`
     INSERT INTO users (username, password) VALUES (${username}, ${hashedPassword}) RETURNING id, username
+  `
+}
+
+export async function updateUser(id: number, username: string, hashedPassword?: string) {
+  if (hashedPassword) {
+    return await sql`
+      UPDATE users SET username = ${username}, password = ${hashedPassword} WHERE id = ${id} RETURNING id, username
+    `
+  }
+  return await sql`
+    UPDATE users SET username = ${username} WHERE id = ${id} RETURNING id, username
   `
 }

@@ -61,7 +61,16 @@ const navItems = [
     label: 'LAPORAN BULANAN',
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+        <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+      </svg>
+    ),
+  },
+  {
+    href: '/settings',
+    label: 'PENGATURAN',
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.91,7.62,6.29L5.23,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.72,8.87 c-0.11,0.21-0.06,0.47,0.12,0.61l2.03,1.58C4.84,11.36,4.81,11.69,4.81,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z" />
       </svg>
     ),
   },
@@ -86,26 +95,24 @@ export default function Sidebar() {
   return (
     <>
       {/* Mobile Top Bar */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-[#0a1931] border-b border-gold-500/10 flex items-center px-4 z-40 gap-3">
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-[#0a1931]/80 backdrop-blur-md border-b border-gold-500/10 flex items-center px-4 z-40 gap-3">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="p-2 bg-gold-500 text-black flex-shrink-0"
+          className="p-2 bg-gold-500 text-black rounded-xl shadow-lg shadow-gold-500/20 active:scale-90 transition-all flex-shrink-0"
           aria-label="Toggle menu"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             {isOpen ? <path d="M18 6L6 18M6 6l12 12" /> : <path d="M4 6h16M4 12h16M4 18h16" />}
           </svg>
         </button>
-        <div className="flex items-center gap-2 overflow-hidden">
-          <img src="/logo.png" alt="logo" className="w-8 h-8 object-contain flex-shrink-0" onError={(e) => { e.currentTarget.style.display = 'none' }} />
-          <span className="font-display text-white text-base tracking-[0.2em] truncate italic -skew-x-6">RODA DUA</span>
+        <div className="flex items-center gap-2 min-w-0 flex-shrink">
+          <div className="w-8 h-8 bg-gold-500/10 rounded-lg p-1.5 border border-gold-500/20 flex-shrink-0">
+            <img src="/logo.png" alt="logo" className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none' }} />
+          </div>
+          <span className="font-display text-white text-base tracking-[0.1em] truncate italic -skew-x-6 uppercase">RODA DUA MOKAS</span>
         </div>
-        {/* Active page indicator */}
-        <div className="ml-auto">
-          <span className="text-[9px] text-gold-500 tracking-[0.2em] uppercase font-bold">
-            {navItems.find(n => n.href === pathname)?.label || ''}
-          </span>
-        </div>
+
+
       </div>
 
       {/* Backdrop */}
@@ -123,7 +130,7 @@ export default function Sidebar() {
           <div className="relative w-full aspect-[16/9] max-w-[180px]">
             <img
               src="/logo.png"
-              alt="RODA DUA Logo"
+              alt="RODA DUA MOKAS Logo"
               className="object-contain w-full h-full drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)]"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
@@ -153,7 +160,6 @@ export default function Sidebar() {
           })}
         </nav>
 
-        {/* Logout */}
         <div className="p-4 border-t border-white/5">
           <button
             onClick={handleLogout}
@@ -167,33 +173,6 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      {/* Mobile Bottom Navigation Bar */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#0a1931] border-t border-gold-500/10 flex items-center justify-around z-40 px-1">
-        {bottomNavItems.map((item) => {
-          const active = pathname === item.href
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex flex-col items-center gap-1 px-2 py-1 min-w-[52px] transition-all ${active ? 'text-gold-500' : 'text-slate-500'}`}
-            >
-              <span className={`transition-transform ${active ? 'scale-110' : ''}`}>{item.icon}</span>
-              <span className="text-[8px] tracking-wide font-bold truncate max-w-[56px] text-center leading-tight">
-                {item.label.split(' ')[0]}
-              </span>
-            </Link>
-          )
-        })}
-        <button
-          onClick={handleLogout}
-          className="flex flex-col items-center gap-1 px-2 py-1 min-w-[52px] text-slate-500 hover:text-red-400 transition-all"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
-          </svg>
-          <span className="text-[8px] tracking-wide font-bold">KELUAR</span>
-        </button>
-      </nav>
     </>
   )
 }

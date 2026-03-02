@@ -98,6 +98,11 @@ export default function LoginPage() {
               {loading ? 'MEMPROSES...' : 'Login'}
             </button>
           </form>
+
+          {/* Watermark inside card */}
+          <div className="mt-6 text-center">
+            <p className="text-[9px] text-[#f4cb38]/30 font-bold tracking-[0.3em] uppercase italic">RWM COMPANY 2026</p>
+          </div>
         </div>
 
         {/* Footer Info */}

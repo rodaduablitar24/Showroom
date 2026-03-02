@@ -7,26 +7,42 @@ export default function UnitKeluarPage() {
   const [units, setUnits] = useState([])
   const [loading, setLoading] = useState(true)
 
+  async function fetchUnits() {
+    setLoading(true)
+    const res = await fetch('/api/units?filter=terjual')
+    const data = await res.json()
+    setUnits(data)
+    setLoading(false)
+  }
+
   useEffect(() => {
-    fetch('/api/units?filter=terjual')
-      .then(r => r.json())
-      .then(data => { setUnits(data); setLoading(false) })
+    fetchUnits()
   }, [])
 
+  async function handleDelete(id: number) {
+    if (!confirm('Hapus unit ini?')) return
+    await fetch(`/api/units?id=${id}`, { method: 'DELETE' })
+    fetchUnits()
+  }
+
   return (
-    <div className="p-4 sm:p-6 md:p-10 animate-in max-w-[1600px] mx-auto overflow-x-hidden">
-      <div className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-10">
-        <div className="md:ml-0">
-          <h1 className="font-display text-2xl sm:text-3xl md:text-4xl tracking-[0.2em] text-white leading-none">UNIT KELUAR</h1>
-          <p className="text-slate-400 text-[10px] sm:text-xs mt-4 font-bold flex items-center gap-3">
-            <span className="w-6 h-0.5 bg-gold-500/50 rounded-full"></span>
+    <div className="p-5 sm:p-8 md:p-12 pb-32 sm:pb-40 animate-in max-w-[1600px] mx-auto overflow-x-hidden">
+      <div className="mb-10 md:mb-16 flex flex-col xl:flex-row xl:items-end justify-between gap-8 md:gap-12">
+        <div>
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl tracking-[0.2em] text-white leading-none uppercase">UNIT KELUAR</h1>
+          <p className="text-slate-400 text-[10px] sm:text-xs mt-4 font-bold flex items-center gap-3 italic">
+            <span className="w-8 h-0.5 bg-gold-500/50 rounded-full"></span>
             RIWAYAT UNIT YANG SUDAH TERJUAL
           </p>
         </div>
-        <div className="bg-gold-500/10 border border-gold-500/20 px-5 py-3 rounded-2xl backdrop-blur-md self-start md:self-auto flex items-center justify-center">
-          <span className="text-gold-400 font-display text-[10px] sm:text-[11px] tracking-[0.2em] font-bold uppercase">{units.length} TERJUAL</span>
+        <div className="bg-gold-500/10 border border-gold-500/20 px-6 py-4 rounded-3xl backdrop-blur-md self-stretch xl:self-auto flex items-center justify-center shadow-lg">
+          <span className="text-gold-400 font-display text-[11px] tracking-[0.2em] font-bold uppercase italic">{units.length} TOTAL TERJUAL</span>
         </div>
       </div>
+
+      <p className="text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase mb-8 px-6 py-3 bg-gold-500/5 rounded-2xl border border-gold-500/10 animate-pulse text-center block md:hidden">
+        DATA UNIT TERJUAL
+      </p>
 
       <div className="animate-in" style={{ animationDelay: '0.1s' }}>
         {loading ? (
@@ -35,7 +51,7 @@ export default function UnitKeluarPage() {
             <p className="font-display tracking-widest uppercase text-sm">MEMUAT DATA...</p>
           </div>
         ) : (
-          <UnitTable units={units} showHargaJual showTanggalKeluar />
+          <UnitTable units={units} showHargaJual showTanggalKeluar onDelete={handleDelete} />
         )}
       </div>
     </div>

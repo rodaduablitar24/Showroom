@@ -14,8 +14,8 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'RODA DUA — Motor Bekas Blitar',
-  description: 'Sistem Manajemen Showroom RODA DUA',
+  title: 'RODA DUA MOKAS',
+  description: 'Sistem Manajemen Showroom RODA DUA MOKAS',
   icons: {
     icon: '/icon.png',
   },
