@@ -69,7 +69,7 @@ export default function LabaPage() {
             PDF
           </button>
           <button
-            onClick={() => {
+            onClick={async () => {
               const exportData = units.map((u: any) => ({
                 'MERK': u.merk,
                 'TYPE': u.type,
@@ -79,7 +79,7 @@ export default function LabaPage() {
                 'HARGA JUAL': Number(u.harga_jual || 0),
                 'LABA': Number(u.harga_jual || 0) - Number(u.harga_beli)
               }));
-              exportToExcel(exportData, `Laba_Penjualan_${new Date().toISOString().slice(0, 10)}`);
+              await exportToExcel(exportData, `Laba_Penjualan_${new Date().toISOString().slice(0, 10)}`);
             }}
             className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-green-500/10 hover:bg-green-500/20 border border-green-500/20 text-green-500 px-5 py-4 rounded-3xl text-[10px] font-bold tracking-widest transition-all"
           >

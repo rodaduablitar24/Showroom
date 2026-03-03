@@ -84,7 +84,7 @@ export default function StokPage() {
               PDF
             </button>
             <button
-              onClick={() => {
+              onClick={async () => {
                 const exportData = filteredUnits.map((u: any) => ({
                   'MEREK': u.merk,
                   'TYPE': u.type,
@@ -92,9 +92,9 @@ export default function StokPage() {
                   'WARNA': u.warna || '-',
                   'NOPOL': u.nopol,
                   'HARGA BELI': Number(u.harga_beli),
-                  'TANGGAL MASUK': u.tanggal_masuk
+                  'TANGGAL MASUK': new Date(u.tanggal_masuk).toLocaleDateString('id-ID')
                 }));
-                exportToExcel(exportData, `Stok_Unit_${new Date().toISOString().slice(0, 10)}`);
+                await exportToExcel(exportData, `Stok_Unit_${new Date().toISOString().slice(0, 10)}`);
               }}
               className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-green-500/10 hover:bg-green-500/20 border border-green-500/20 text-green-500 px-5 py-4 rounded-3xl text-[10px] font-bold tracking-widest transition-all"
             >

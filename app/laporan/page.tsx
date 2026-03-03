@@ -6,6 +6,8 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, Cartes
 
 const BULAN_NAMES = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
 
+import { exportToExcel, exportToPDF } from '@/lib/export'
+
 export default function LaporanPage() {
   const [laporan, setLaporan] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -56,6 +58,46 @@ export default function LaporanPage() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full xl:w-auto">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                const headers = [['BULAN', 'UNIT TERJUAL', 'MODAL POKOK', 'TOTAL PENJUALAN', 'NET PROFIT']];
+                const exportData = BULAN_NAMES.map((name, i) => {
+                  const d = laporan.find((l: any) => Number(l.bulan) === i + 1)
+                  return [
+                    name,
+                    d ? d.unit_terjual : 0,
+                    d ? Number(d.total_modal).toLocaleString('id-ID') : 0,
+                    d ? Number(d.total_penjualan).toLocaleString('id-ID') : 0,
+                    d ? Number(d.laba).toLocaleString('id-ID') : 0
+                  ];
+                });
+                exportToPDF(headers, exportData, `Laporan_Bulanan_${tahun}`, `LAPORAN BULANAN RODA DUA - TAHUN ${tahun}`);
+              }}
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-500 px-5 py-4 rounded-3xl text-[10px] font-bold tracking-widest transition-all"
+            >
+              PDF
+            </button>
+            <button
+              onClick={async () => {
+                const exportData = BULAN_NAMES.map((name, i) => {
+                  const d = laporan.find((l: any) => Number(l.bulan) === i + 1)
+                  return {
+                    'BULAN': name,
+                    'UNIT TERJUAL': d ? Number(d.unit_terjual) : 0,
+                    'MODAL POKOK': d ? Number(d.total_modal) : 0,
+                    'TOTAL PENJUALAN': d ? Number(d.total_penjualan) : 0,
+                    'NET PROFIT': d ? Number(d.laba) : 0
+                  };
+                });
+                await exportToExcel(exportData, `Laporan_Bulanan_${tahun}`);
+              }}
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-green-500/10 hover:bg-green-500/20 border border-green-500/20 text-green-500 px-5 py-4 rounded-3xl text-[10px] font-bold tracking-widest transition-all"
+            >
+              EXCEL
+            </button>
+          </div>
+
           <div className="flex items-center bg-[#0a1931]/60 backdrop-blur-md border border-gold-500/20 rounded-3xl p-1.5 focus-within:border-gold-500/50 transition-all shadow-lg">
             <span className="px-4 text-[10px] font-black tracking-widest text-slate-500 uppercase">Tahun</span>
             <input
