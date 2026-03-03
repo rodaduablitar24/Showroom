@@ -62,27 +62,38 @@ export async function exportToExcel(data: any[], fileName: string) {
     worksheet.eachRow((row, rowNumber) => {
         if (rowNumber === 1) return; // Skip header
 
-        row.height = 20; // Consistent row height
+        row.height = 25; // Consistent row height for premium feel
         row.eachCell((cell, colNumber) => {
             // Add border to data cells
             cell.border = {
-                top: { style: 'thin' },
-                left: { style: 'thin' },
-                bottom: { style: 'thin' },
-                right: { style: 'thin' }
+                top: { style: 'thin', color: { argb: 'FFE2E8F0' } },
+                left: { style: 'thin', color: { argb: 'FFE2E8F0' } },
+                bottom: { style: 'thin', color: { argb: 'FFE2E8F0' } },
+                right: { style: 'thin', color: { argb: 'FFE2E8F0' } }
             };
 
-            // Formatting for numeric values (like prices)
+            const headerValue = worksheet.getRow(1).getCell(colNumber).value?.toString().toUpperCase() || '';
+
+            // Formatting for numeric values
             if (typeof cell.value === 'number') {
-                cell.numFmt = '#,##0'; // Indonesian thousands separator style (dots in Excel UI usually, but format is standard)
-                cell.alignment = { vertical: 'middle', horizontal: 'right' };
+                if (headerValue.includes('TAHUN')) {
+                    cell.numFmt = '0'; // Plain number for years
+                } else {
+                    cell.numFmt = '#,##0'; // Thousands separator for prices/counts
+                }
+                cell.alignment = { vertical: 'middle', horizontal: 'center' };
+            } else {
+                cell.alignment = { vertical: 'middle', horizontal: 'left' };
             }
 
             // Update column width based on content
             const column = worksheet.getColumn(colNumber);
             const contentLen = cell.value ? cell.value.toString().length : 0;
-            if (contentLen + 4 > (column.width || 0)) {
-                column.width = contentLen + 6;
+            const headerLen = headerValue.length;
+            const maxLen = Math.max(contentLen, headerLen);
+
+            if (maxLen + 10 > (column.width || 0)) {
+                column.width = maxLen + 10;
             }
         });
     });

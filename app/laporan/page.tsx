@@ -11,7 +11,7 @@ import { exportToExcel, exportToPDF } from '@/lib/export'
 export default function LaporanPage() {
   const [laporan, setLaporan] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [tahun, setTahun] = useState(2025)
+  const [tahun, setTahun] = useState(new Date().getFullYear())
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function LaporanPage() {
     }
   })
 
-  const totalTerjual = laporan.reduce((s: number, l: any) => s + (l.unit_terjual || 0), 0)
+  const totalTerjual = laporan.reduce((s: number, l: any) => s + Number(l.unit_terjual || 0), 0)
   const totalLaba = laporan.reduce((s: number, l: any) => s + Number(l.laba), 0)
   const totalPenjualan = laporan.reduce((s: number, l: any) => s + Number(l.total_penjualan), 0)
 

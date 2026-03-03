@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import DateInput from '@/components/DateInput'
 
 export default function TambahUnitPage() {
     const router = useRouter()
@@ -14,7 +15,7 @@ export default function TambahUnitPage() {
         nopol: '',
         harga_beli: '',
         warna: '',
-        tanggal_masuk: new Date().toISOString().slice(0, 10)
+        tanggal_masuk: new Date().toLocaleDateString('en-CA')
     }
 
     const [form, setForm] = useState(emptyForm)
@@ -49,12 +50,11 @@ export default function TambahUnitPage() {
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="block text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold ml-1 text-left">Tanggal Masuk</label>
-                                <input type="date" value={form.tanggal_masuk}
-                                    onChange={e => setForm({ ...form, tanggal_masuk: e.target.value })}
-                                    className="w-full bg-[#0f2444] border border-gold-500/10 text-white px-5 py-3.5 rounded-2xl text-sm focus:outline-none focus:border-gold-500/50 transition-all shadow-inner" required />
-                            </div>
+                            <DateInput
+                                label="Tanggal Masuk"
+                                value={form.tanggal_masuk}
+                                onChange={val => setForm({ ...form, tanggal_masuk: val })}
+                            />
                             <div className="space-y-2">
                                 <label className="block text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold ml-1 text-left">Tahun Produksi</label>
                                 <input type="number" value={form.tahun}

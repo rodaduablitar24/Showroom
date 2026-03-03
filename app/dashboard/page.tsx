@@ -10,7 +10,7 @@ const BULAN_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Se
 export default function DashboardPage() {
   const [data, setData] = useState<any>(null)
   const [isMounted, setIsMounted] = useState(false)
-  const [currentYear, setCurrentYear] = useState(2025)
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
 
   useEffect(() => {
     setIsMounted(true)

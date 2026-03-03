@@ -71,11 +71,12 @@ export default function LabaPage() {
           <button
             onClick={async () => {
               const exportData = units.map((u: any) => ({
+                'TGL KELUAR': u.tanggal_keluar ? new Date(u.tanggal_keluar).toLocaleDateString('id-ID') : '-',
                 'MERK': u.merk,
                 'TYPE': u.type,
                 'TAHUN': u.tahun,
                 'WARNA': u.warna || '-',
-                'HARGA BELI': Number(u.harga_beli),
+                'NOPOL': u.nopol,
                 'HARGA JUAL': Number(u.harga_jual || 0),
                 'LABA': Number(u.harga_jual || 0) - Number(u.harga_beli)
               }));

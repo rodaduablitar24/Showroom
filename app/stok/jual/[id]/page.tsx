@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
+import DateInput from '@/components/DateInput'
 
 export default function JualUnitPage() {
     const router = useRouter()
@@ -14,7 +15,7 @@ export default function JualUnitPage() {
     const [submitting, setSubmitting] = useState(false)
     const [form, setForm] = useState({
         harga_jual: '',
-        tanggal_keluar: new Date().toISOString().slice(0, 10)
+        tanggal_keluar: new Date().toLocaleDateString('en-CA')
     })
 
     useEffect(() => {
@@ -94,16 +95,11 @@ export default function JualUnitPage() {
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="space-y-2">
-                            <label className="block text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold ml-1 text-left italic">Tanggal Keluar</label>
-                            <input
-                                type="date"
-                                value={form.tanggal_keluar}
-                                onChange={e => setForm({ ...form, tanggal_keluar: e.target.value })}
-                                className="w-full bg-[#0f2444] border border-gold-500/10 text-white px-5 py-3.5 rounded-2xl text-sm focus:outline-none focus:border-gold-500/50 transition-all font-bold shadow-inner"
-                                required
-                            />
-                        </div>
+                        <DateInput
+                            label="Tanggal Keluar"
+                            value={form.tanggal_keluar}
+                            onChange={(val: string) => setForm({ ...form, tanggal_keluar: val })}
+                        />
                         <div className="space-y-2">
                             <label className="block text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold ml-1 text-left italic">Harga Jual (Rp)</label>
                             <input

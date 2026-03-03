@@ -86,13 +86,13 @@ export default function StokPage() {
             <button
               onClick={async () => {
                 const exportData = filteredUnits.map((u: any) => ({
+                  'TANGGAL MASUK': new Date(u.tanggal_masuk).toLocaleDateString('id-ID'),
                   'MEREK': u.merk,
                   'TYPE': u.type,
                   'TAHUN': u.tahun,
                   'WARNA': u.warna || '-',
                   'NOPOL': u.nopol,
-                  'HARGA BELI': Number(u.harga_beli),
-                  'TANGGAL MASUK': new Date(u.tanggal_masuk).toLocaleDateString('id-ID')
+                  'HARGA BELI': Number(u.harga_beli)
                 }));
                 await exportToExcel(exportData, `Stok_Unit_${new Date().toISOString().slice(0, 10)}`);
               }}

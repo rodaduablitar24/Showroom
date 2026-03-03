@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const navItems = [
   {
@@ -127,7 +127,7 @@ export default function Sidebar() {
       <aside className={`fixed left-0 top-0 h-screen w-72 bg-[#0a1931] border-r border-gold-500/10 flex flex-col z-40 transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} lg:w-64`}>
         {/* Precision Logo Header */}
         <div className="py-10 px-6 border-b border-gold-500/10 flex flex-col items-center">
-          <div className="relative w-full aspect-[16/9] max-w-[180px]">
+          <div className="relative w-full aspect-[16/9] max-w-[150px]">
             <img
               src="/logo.png"
               alt="RODA DUA MOKAS Logo"

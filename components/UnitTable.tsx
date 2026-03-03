@@ -150,7 +150,7 @@ export default function UnitTable({
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b border-gold-500/10 bg-[#0a1931]/60">
-              <th className="px-6 py-5 text-[10px] font-black tracking-[0.2em] text-slate-500 uppercase">Tanggal</th>
+              <th className="px-6 py-5 text-[10px] font-black tracking-[0.2em] text-slate-500 uppercase">{showTanggalKeluar ? 'Tgl Keluar' : 'Tanggal Masuk'}</th>
               <th className="px-6 py-5 text-[10px] font-black tracking-[0.2em] text-slate-500 uppercase">Merek</th>
               <th className="px-6 py-5 text-[10px] font-black tracking-[0.2em] text-slate-500 uppercase">Type</th>
               <th className="px-6 py-5 text-[10px] font-black tracking-[0.2em] text-slate-500 uppercase">Tahun</th>
@@ -176,9 +176,11 @@ export default function UnitTable({
                   <tr key={unit.id} className="group hover:bg-white/[0.02] transition-colors">
                     <td className="px-6 py-6 min-w-[120px]">
                       <div className="flex flex-col">
-                        <span className="text-[13px] text-slate-300 font-bold tracking-wider">{formatDate(unit.tanggal_masuk)}</span>
+                        <span className="text-[13px] text-slate-300 font-bold tracking-wider">
+                          {showTanggalKeluar && unit.tanggal_keluar ? formatDate(unit.tanggal_keluar) : formatDate(unit.tanggal_masuk)}
+                        </span>
                         {showTanggalKeluar && unit.tanggal_keluar && (
-                          <span className="text-[10px] text-gold-500/50 italic mt-0.5 font-bold uppercase">KELUAR: {formatDate(unit.tanggal_keluar)}</span>
+                          <span className="text-[10px] text-gold-500/50 italic mt-0.5 font-bold uppercase">MASUK: {formatDate(unit.tanggal_masuk)}</span>
                         )}
                       </div>
                     </td>

@@ -114,7 +114,7 @@ export async function getDashboardStats() {
 
 // ============ LAPORAN BULANAN ============
 export async function getLaporanBulanan(tahun: number) {
-  return await sql`
+  const result = await sql`
     SELECT 
       EXTRACT(MONTH FROM tanggal_keluar) as bulan,
       COUNT(*) as unit_terjual,
@@ -127,6 +127,13 @@ export async function getLaporanBulanan(tahun: number) {
     GROUP BY EXTRACT(MONTH FROM tanggal_keluar)
     ORDER BY bulan
   `
+  return result.map(r => ({
+    ...r,
+    unit_terjual: Number(r.unit_terjual),
+    total_penjualan: Number(r.total_penjualan),
+    total_modal: Number(r.total_modal),
+    laba: Number(r.laba)
+  }))
 }
 
 // ============ AUTH ============
