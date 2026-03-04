@@ -67,15 +67,15 @@ export default function StokPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => {
-                const headers = [['MEREK', 'TYPE', 'TAHUN', 'WARNA', 'NOPOL', 'HARGA BELI', 'TANGGAL MASUK']];
+                const headers = [['TANGGAL MASUK', 'MEREK', 'TYPE', 'TAHUN', 'WARNA', 'NOPOL', 'HARGA BELI']];
                 const exportData = filteredUnits.map((u: any) => [
+                  new Date(u.tanggal_masuk).toLocaleDateString('id-ID'),
                   u.merk,
                   u.type,
                   u.tahun,
                   u.warna || '-',
                   u.nopol,
-                  Number(u.harga_beli).toLocaleString('id-ID'),
-                  new Date(u.tanggal_masuk).toLocaleDateString('id-ID')
+                  Number(u.harga_beli).toLocaleString('id-ID')
                 ]);
                 exportToPDF(headers, exportData, `Stok_Unit_${new Date().toISOString().slice(0, 10)}`, 'DAFTAR STOK UNIT RODA DUA');
               }}

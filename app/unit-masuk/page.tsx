@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import UnitTable from '@/components/UnitTable'
+import { exportToExcel, exportToPDF } from '@/lib/export'
 
 export default function UnitMasukPage() {
   const router = useRouter()
@@ -42,12 +43,51 @@ export default function UnitMasukPage() {
               RIWAYAT PENGADAAN UNIT SHOWROOM
             </p>
           </div>
-          <button
-            onClick={() => router.push('/unit-masuk/tambah')}
-            className="w-full md:w-auto bg-gold-500 hover:bg-gold-400 text-black font-display text-[11px] tracking-[0.2em] px-6 py-4 rounded-2xl transition-all active:shadow-glow-gold active:scale-95 flex items-center justify-center gap-3 uppercase font-bold"
-          >
-            <span className="text-base leading-none font-bold">+</span> TAMBAH UNIT
-          </button>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full xl:w-auto">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => {
+                  const headers = [['TANGGAL MASUK', 'MEREK', 'TYPE', 'TAHUN', 'WARNA', 'NOPOL', 'HARGA BELI']];
+                  const exportData = units.map((u: any) => [
+                    new Date(u.tanggal_masuk).toLocaleDateString('id-ID'),
+                    u.merk,
+                    u.type,
+                    u.tahun,
+                    u.warna || '-',
+                    u.nopol,
+                    Number(u.harga_beli).toLocaleString('id-ID')
+                  ]);
+                  exportToPDF(headers, exportData, `Unit_Masuk_${new Date().toISOString().slice(0, 10)}`, 'DAFTAR RIWAYAT UNIT MASUK RODA DUA');
+                }}
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-500 px-5 py-4 rounded-3xl text-[10px] font-bold tracking-widest transition-all"
+              >
+                PDF
+              </button>
+              <button
+                onClick={async () => {
+                  const exportData = units.map((u: any) => ({
+                    'TANGGAL MASUK': new Date(u.tanggal_masuk).toLocaleDateString('id-ID'),
+                    'MEREK': u.merk,
+                    'TYPE': u.type,
+                    'TAHUN': u.tahun,
+                    'WARNA': u.warna || '-',
+                    'NOPOL': u.nopol,
+                    'HARGA BELI': Number(u.harga_beli)
+                  }));
+                  await exportToExcel(exportData, `Unit_Masuk_${new Date().toISOString().slice(0, 10)}`);
+                }}
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-green-500/10 hover:bg-green-500/20 border border-green-500/20 text-green-500 px-5 py-4 rounded-3xl text-[10px] font-bold tracking-widest transition-all"
+              >
+                EXCEL
+              </button>
+            </div>
+            <button
+              onClick={() => router.push('/unit-masuk/tambah')}
+              className="w-full sm:w-auto bg-gold-500 hover:bg-gold-400 text-black font-display text-[11px] tracking-[0.2em] px-6 py-4 rounded-2xl transition-all active:shadow-glow-gold active:scale-95 flex items-center justify-center gap-3 uppercase font-bold"
+            >
+              <span className="text-base leading-none font-bold">+</span> TAMBAH UNIT
+            </button>
+          </div>
         </div>
 
         <p className="text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase mb-8 px-6 py-3 bg-gold-500/5 rounded-2xl border border-gold-500/10 animate-pulse text-center block md:hidden">

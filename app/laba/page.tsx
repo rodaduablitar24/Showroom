@@ -49,14 +49,16 @@ export default function LabaPage() {
         <div className="flex items-center gap-3 w-full xl:w-auto">
           <button
             onClick={() => {
-              const headers = [['MERK', 'TYPE', 'TAHUN', 'WARNA', 'HARGA BELI', 'HARGA JUAL', 'LABA']];
+              const headers = [['TGL KELUAR', 'MERK', 'TYPE', 'TAHUN', 'WARNA', 'NOPOL', 'HARGA BELI', 'HARGA JUAL', 'LABA']];
               const exportData = units.map((u: any) => {
                 const laba = Number(u.harga_jual || 0) - Number(u.harga_beli);
                 return [
+                  u.tanggal_keluar ? new Date(u.tanggal_keluar).toLocaleDateString('id-ID') : '-',
                   u.merk,
                   u.type,
                   u.tahun,
                   u.warna || '-',
+                  u.nopol,
                   Number(u.harga_beli).toLocaleString('id-ID'),
                   Number(u.harga_jual || 0).toLocaleString('id-ID'),
                   laba.toLocaleString('id-ID')
@@ -77,6 +79,7 @@ export default function LabaPage() {
                 'TAHUN': u.tahun,
                 'WARNA': u.warna || '-',
                 'NOPOL': u.nopol,
+                'HARGA BELI': Number(u.harga_beli),
                 'HARGA JUAL': Number(u.harga_jual || 0),
                 'LABA': Number(u.harga_jual || 0) - Number(u.harga_beli)
               }));
@@ -120,7 +123,7 @@ export default function LabaPage() {
             <p className="font-display tracking-widest uppercase text-sm">MEMUAT DATA...</p>
           </div>
         ) : (
-          <UnitTable units={units} showHargaJual showTanggalKeluar showLaba onDelete={handleDelete} />
+          <UnitTable units={units} showHargaJual showHargaBeli showTanggalKeluar showLaba onDelete={handleDelete} />
         )}
       </div>
     </div>

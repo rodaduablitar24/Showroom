@@ -22,6 +22,7 @@ interface UnitTableProps {
   onJual?: (unit: Unit) => void
   onDelete?: (id: number) => void
   showHargaJual?: boolean
+  showHargaBeli?: boolean
   showTanggalKeluar?: boolean
   showLaba?: boolean
 }
@@ -42,6 +43,7 @@ export default function UnitTable({
   onJual,
   onDelete,
   showHargaJual = false,
+  showHargaBeli = false,
   showTanggalKeluar = false,
   showLaba = false
 }: UnitTableProps) {
@@ -80,7 +82,7 @@ export default function UnitTable({
                     <p className="text-[9px] text-slate-500 font-bold tracking-widest uppercase mb-1">Warna</p>
                     <p className="text-sm text-white/70 font-bold">{unit.warna || '-'}</p>
                   </div>
-                  {!showHargaJual && (
+                  {(showHargaBeli || !showHargaJual) && (
                     <div>
                       <p className="text-[9px] text-slate-500 font-bold tracking-widest uppercase mb-1">Harga Beli</p>
                       <p className="text-sm text-gold-400 font-bold">{formatRupiah(Number(unit.harga_beli))}</p>
@@ -156,7 +158,7 @@ export default function UnitTable({
               <th className="px-6 py-5 text-[10px] font-black tracking-[0.2em] text-slate-500 uppercase">Tahun</th>
               <th className="px-6 py-5 text-[10px] font-black tracking-[0.2em] text-slate-500 uppercase">Warna</th>
               <th className="px-6 py-5 text-[10px] font-black tracking-[0.2em] text-slate-500 uppercase">Nopol</th>
-              {!showHargaJual && <th className="px-6 py-5 text-[10px] font-black tracking-[0.2em] text-slate-500 uppercase text-right">Harga Beli</th>}
+              {(showHargaBeli || !showHargaJual) && <th className="px-6 py-5 text-[10px] font-black tracking-[0.2em] text-slate-500 uppercase text-right">Harga Beli</th>}
               {showHargaJual && <th className="px-6 py-5 text-[10px] font-black tracking-[0.2em] text-slate-500 uppercase text-right">Harga Jual</th>}
               {showLaba && <th className="px-6 py-5 text-[10px] font-black tracking-[0.2em] text-gold-500/60 uppercase text-right">Laba</th>}
               <th className="px-6 py-5 text-[10px] font-black tracking-[0.2em] text-slate-500 uppercase text-right">Aksi</th>
@@ -199,7 +201,7 @@ export default function UnitTable({
                     <td className="px-6 py-6">
                       <span className="text-blue-400/80 font-mono text-[13px] font-bold tracking-[0.15em]">{unit.nopol}</span>
                     </td>
-                    {!showHargaJual && (
+                    {(showHargaBeli || !showHargaJual) && (
                       <td className="px-6 py-6 text-right">
                         <span className="text-gold-500 font-bold tracking-widest text-[13px] uppercase italic">{formatRupiah(Number(unit.harga_beli))}</span>
                       </td>
@@ -208,7 +210,9 @@ export default function UnitTable({
                       <td className="px-6 py-6 text-right">
                         <div className="flex flex-col items-end">
                           <span className="text-green-500 font-bold tracking-widest text-[13px] uppercase italic">{formatRupiah(Number(unit.harga_jual || 0))}</span>
-                          <span className="text-[10px] text-slate-500 line-through opacity-50 font-bold uppercase">{formatRupiah(Number(unit.harga_beli))}</span>
+                          {(!showHargaBeli) && (
+                            <span className="text-[10px] text-slate-500 line-through opacity-50 font-bold uppercase">{formatRupiah(Number(unit.harga_beli))}</span>
+                          )}
                         </div>
                       </td>
                     )}

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import UnitTable from '@/components/UnitTable'
+import { exportToExcel, exportToPDF } from '@/lib/export'
 
 export default function UnitKeluarPage() {
   const [units, setUnits] = useState([])
@@ -35,8 +36,49 @@ export default function UnitKeluarPage() {
             RIWAYAT UNIT YANG SUDAH TERJUAL
           </p>
         </div>
-        <div className="bg-gold-500/10 border border-gold-500/20 px-6 py-4 rounded-3xl backdrop-blur-md self-stretch xl:self-auto flex items-center justify-center shadow-lg">
-          <span className="text-gold-400 font-display text-[11px] tracking-[0.2em] font-bold uppercase italic">{units.length} TOTAL TERJUAL</span>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full xl:w-auto">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                const headers = [['TGL KELUAR', 'MEREK', 'TYPE', 'TAHUN', 'WARNA', 'NOPOL', 'HARGA BELI', 'HARGA JUAL']];
+                const exportData = units.map((u: any) => [
+                  u.tanggal_keluar ? new Date(u.tanggal_keluar).toLocaleDateString('id-ID') : '-',
+                  u.merk,
+                  u.type,
+                  u.tahun,
+                  u.warna || '-',
+                  u.nopol,
+                  Number(u.harga_beli).toLocaleString('id-ID'),
+                  Number(u.harga_jual || 0).toLocaleString('id-ID')
+                ]);
+                exportToPDF(headers, exportData, `Unit_Keluar_${new Date().toISOString().slice(0, 10)}`, 'DAFTAR UNIT TERJUAL RODA DUA');
+              }}
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-500 px-5 py-4 rounded-3xl text-[10px] font-bold tracking-widest transition-all"
+            >
+              PDF
+            </button>
+            <button
+              onClick={async () => {
+                const exportData = units.map((u: any) => ({
+                  'TGL KELUAR': u.tanggal_keluar ? new Date(u.tanggal_keluar).toLocaleDateString('id-ID') : '-',
+                  'MEREK': u.merk,
+                  'TYPE': u.type,
+                  'TAHUN': u.tahun,
+                  'WARNA': u.warna || '-',
+                  'NOPOL': u.nopol,
+                  'HARGA BELI': Number(u.harga_beli),
+                  'HARGA JUAL': Number(u.harga_jual || 0)
+                }));
+                await exportToExcel(exportData, `Unit_Keluar_${new Date().toISOString().slice(0, 10)}`);
+              }}
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-green-500/10 hover:bg-green-500/20 border border-green-500/20 text-green-500 px-5 py-4 rounded-3xl text-[10px] font-bold tracking-widest transition-all"
+            >
+              EXCEL
+            </button>
+          </div>
+          <div className="bg-gold-500/10 border border-gold-500/20 px-6 py-4 rounded-3xl backdrop-blur-md flex items-center justify-center shadow-lg">
+            <span className="text-gold-400 font-display text-[11px] tracking-[0.2em] font-bold uppercase italic">{units.length} TOTAL TERJUAL</span>
+          </div>
         </div>
       </div>
 
@@ -51,7 +93,7 @@ export default function UnitKeluarPage() {
             <p className="font-display tracking-widest uppercase text-sm">MEMUAT DATA...</p>
           </div>
         ) : (
-          <UnitTable units={units} showHargaJual showTanggalKeluar onDelete={handleDelete} />
+          <UnitTable units={units} showHargaJual showHargaBeli showTanggalKeluar onDelete={handleDelete} />
         )}
       </div>
     </div>
